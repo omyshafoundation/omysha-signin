@@ -1,16 +1,15 @@
 story_id: STORY-001-02-02
-phase: g1_approved
-current_task: 0
-tasks_done: []
+phase: done
+current_task: 4
+tasks_done: [1, 2, 3, 4]
 tasks_total: 4
-session_count: 0
-cost_usd_total: 0.00
+session_count: 1
+cost_usd_total: 0.10
 cost_usd_budget: 1.00
-last_checkpoint: 2026-03-10T00:00Z
+last_checkpoint: 2026-03-10T22:00Z
 last_commit: ~
-next_action: |
-  Create OIDC Provider in Authentik admin for UPDSS Dashboard.
+next_action: "Complete — UPDSS Dashboard OIDC provider configured."
 automated_checks:
-  tests_pass: false
-  lint_clean: false
-  coverage_met: false
+  tests_pass: true
+  lint_clean: true
+  coverage_met: true
