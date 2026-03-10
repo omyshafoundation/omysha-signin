@@ -1,0 +1,16 @@
+story_id: STORY-001-02-03
+phase: planned
+current_task: 0
+tasks_done: []
+tasks_total: 5
+session_count: 0
+cost_usd_total: 0.00
+cost_usd_budget: 1.50
+last_checkpoint: 2026-03-10T00:00Z
+last_commit: ~
+next_action: |
+  Create test user in Authentik with multiple group memberships.
+automated_checks:
+  tests_pass: false
+  lint_clean: false
+  coverage_met: false

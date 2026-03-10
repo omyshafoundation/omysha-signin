@@ -1,0 +1,82 @@
+metadata:
+  id: STORY-001-02-01
+  feature: FEAT-001-02
+  epic: EPIC-001
+  title: "Create OIDC provider and application binding for Secretariat System"
+  status: planned
+  owner: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+  created: 2026-03-10
+  created_by: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+  release: v0.1
+  estimated_days: 1
+  cost_budget_usd: 1.00
+
+what: |
+  In Authentik Admin → Applications → Providers, create an OIDC Provider:
+  - Name: secretariat-oidc
+  - Authorization flow: default-provider-authorization-implicit-consent
+  - Enable groups scope mapping
+  - Note Client ID and Secret for Secretariat app configuration
+
+  Then create an Application:
+  - Name: Omysha Secretariat
+  - Provider: secretariat-oidc
+  - Launch URL: http://localhost:2008 (local, TBD for production)
+  - Bind groups: internal:sankle, external:advisor
+
+  Per IAM PRD Section 9.1: Authorization Code Flow with PKCE.
+
+why: |
+  The Secretariat System is the first consumer application per IAM PRD.
+  This provider enables SSO login for the Secretariat app.
+
+constraints:
+  - "Follow IAM PRD Section 9.1 configuration steps exactly"
+  - "Required JWT claims: sub, email, name, groups"
+  - "Application binding: internal:sankle and external:advisor only"
+
+out_of_scope:
+  - "Secretariat app-side OIDC integration — separate repo"
+  - "Production URL configuration — local first"
+
+security:
+  auth_required: true
+  data_classification: confidential
+  input_validation: none
+  specific_requirements:
+    - "Client Secret must not be committed to version control"
+    - "PKCE required for Authorization Code Flow"
+
+depends_on:
+  - STORY-001-01-03
+blocks: []
+
+acceptance_criteria:
+  - id: AC-1
+    description: "OIDC provider secretariat-oidc visible in Authentik providers"
+    test_ref: "manual — admin UI"
+  - id: AC-2
+    description: "Application Omysha Secretariat created with correct group bindings"
+    test_ref: "manual — admin UI"
+  - id: AC-3
+    description: "Discovery endpoint returns valid OIDC config"
+    test_ref: "curl http://localhost:3008/application/o/secretariat/.well-known/openid-configuration"
+
+tasks:
+  - id: T-1
+    title: "Create OIDC Provider secretariat-oidc with groups scope"
+    done: false
+  - id: T-2
+    title: "Create Application with group bindings"
+    done: false
+  - id: T-3
+    title: "Validate discovery endpoint"
+    done: false
+  - id: T-4
+    title: "Document Client ID (not Secret) and config in progress.md"
+    done: false
+
+agent_config:
+  model: claude-opus-4-6
+  max_turns: 15
+  tools: [Bash, Read, Write, Edit]

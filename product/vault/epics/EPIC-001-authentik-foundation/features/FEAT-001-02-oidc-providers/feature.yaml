@@ -1,0 +1,41 @@
+id: FEAT-001-02
+epic: EPIC-001
+title: "OIDC Application Providers for Consumer Apps"
+status: planned
+owner: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+created: 2026-03-10
+created_by: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+
+releases_containing_this_feature:
+  - v0.1
+
+what: |
+  Create OIDC providers and application bindings in Authentik for consumer
+  applications. Configure group-based access control (deny-by-default).
+  Validate that JWT tokens include the groups claim with correct memberships.
+
+stories:
+  - STORY-001-02-01  # OIDC provider for Secretariat System
+  - STORY-001-02-02  # OIDC provider for UPDSS Dashboard
+  - STORY-001-02-03  # JWT groups claim validation
+
+acceptance_criteria:
+  - id: AC-1
+    description: "OIDC providers created for Secretariat and UPDSS Dashboard"
+    test_ref: "manual — Authentik admin verification"
+  - id: AC-2
+    description: "JWT tokens include groups claim with correct memberships"
+    test_ref: "manual — token inspection"
+
+constraints:
+  - "Use Authorization Code Flow with PKCE per IAM PRD Section 9.1"
+  - "groups scope must be enabled on all OIDC providers"
+  - "Application binding is deny-by-default — explicit group bindings required"
+
+out_of_scope:
+  - "SAML providers for Frappe/Moodle — that is v0.2"
+  - "Permission enforcement in consumer apps — each app implements its own"
+
+depends_on:
+  - FEAT-001-01
+open_questions: []

@@ -1,0 +1,81 @@
+metadata:
+  id: STORY-001-02-02
+  feature: FEAT-001-02
+  epic: EPIC-001
+  title: "Create OIDC provider and application binding for UPDSS Dashboard"
+  status: planned
+  owner: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+  created: 2026-03-10
+  created_by: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+  release: v0.1
+  estimated_days: 1
+  cost_budget_usd: 1.00
+
+what: |
+  Create an OIDC Provider in Authentik:
+  - Name: updss-dashboard-oidc
+  - Enable groups scope mapping
+  - Authorization Code Flow with PKCE
+
+  Create an Application:
+  - Name: UPDSS Dashboard
+  - Provider: updss-dashboard-oidc
+  - Launch URL: http://localhost:3021 (local, TBD for production)
+  - Bind groups: sys:updss:admin, sys:updss:developer, sys:updss:viewer
+
+  This provider will be consumed by the UPDSS dashboard at v0.5.
+
+why: |
+  The UPDSS dashboard (v0.5) needs an OIDC provider to authenticate users
+  and receive role claims for authorization decisions. Creating the provider
+  now ensures the auth infrastructure is ready when the dashboard is built.
+
+constraints:
+  - "Required JWT claims: sub, email, name, groups"
+  - "Application binding: sys:updss:admin, sys:updss:developer, sys:updss:viewer"
+  - "Follow same pattern as Secretariat OIDC provider"
+
+out_of_scope:
+  - "Dashboard implementation — that is UPDSS EPIC-015 / v0.5"
+  - "Permission enforcement — that is UPDSS EPIC-015"
+
+security:
+  auth_required: true
+  data_classification: confidential
+  input_validation: none
+  specific_requirements:
+    - "Client Secret must not be committed to version control"
+
+depends_on:
+  - STORY-001-01-03
+blocks: []
+
+acceptance_criteria:
+  - id: AC-1
+    description: "OIDC provider updss-dashboard-oidc visible in Authentik providers"
+    test_ref: "manual — admin UI"
+  - id: AC-2
+    description: "Application UPDSS Dashboard created with correct UPDSS group bindings"
+    test_ref: "manual — admin UI"
+  - id: AC-3
+    description: "Discovery endpoint returns valid OIDC config"
+    test_ref: "curl http://localhost:3008/application/o/updss-dashboard/.well-known/openid-configuration"
+
+tasks:
+  - id: T-1
+    title: "Create OIDC Provider updss-dashboard-oidc with groups scope"
+    done: false
+  - id: T-2
+    title: "Create Application with UPDSS group bindings"
+    done: false
+  - id: T-3
+    title: "Validate discovery endpoint"
+    done: false
+  - id: T-4
+    title: "Document Client ID (not Secret) and config in progress.md"
+    done: false
+
+agent_config:
+  model: claude-opus-4-6
+  max_turns: 15
+  tools: [Bash, Read, Write, Edit]

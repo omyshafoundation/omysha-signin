@@ -1,0 +1,92 @@
+metadata:
+  id: STORY-001-02-03
+  feature: FEAT-001-02
+  epic: EPIC-001
+  title: "Validate JWT groups claim flows correctly to consumers"
+  status: planned
+  owner: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+  created: 2026-03-10
+  created_by: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+  release: v0.1
+  estimated_days: 1
+  cost_budget_usd: 1.50
+
+what: |
+  End-to-end validation that Authentik-issued JWT tokens contain the correct
+  groups claim. Steps:
+
+  1. Create a test user in Authentik with multiple group memberships
+     (internal:sankle, team:TechProducts, sys:updss:admin)
+  2. Log in as the test user via one of the configured OIDC providers
+  3. Inspect the issued JWT token — verify groups claim contains all assigned groups
+  4. Test group-based access denial — user NOT in an application's bound group
+     should be blocked from accessing that application
+  5. Document the token structure and validation results
+
+  Per IAM PRD FR-09, the JWT must include:
+  {
+    "sub": "user@gmail.com",
+    "email": "user@gmail.com",
+    "groups": ["internal:sankle", "team:TechProducts", "sys:updss:admin"]
+  }
+
+why: |
+  This is the critical validation that proves the entire IAM pipeline works.
+  If JWT groups claims don't flow correctly, no downstream application can
+  make authorization decisions. This validates IAM PRD FR-09, FR-10, FR-11.
+
+constraints:
+  - "Must test with a real user account (not admin)"
+  - "Must validate both positive (access granted) and negative (access denied) cases"
+  - "JWT must include sub, email, name, groups claims"
+
+out_of_scope:
+  - "Consumer app-side token validation — each app implements its own"
+  - "Production validation — local only in this story"
+
+security:
+  auth_required: true
+  data_classification: confidential
+  input_validation: required
+  specific_requirements:
+    - "Test user credentials must not be committed to version control"
+    - "JWT tokens must not be logged in full in progress.md — redact sensitive claims"
+
+depends_on:
+  - STORY-001-02-01
+  - STORY-001-02-02
+
+blocks: []
+
+acceptance_criteria:
+  - id: AC-1
+    description: "Test user created with multiple group memberships"
+    test_ref: "manual — Authentik admin user view"
+  - id: AC-2
+    description: "JWT groups claim contains all assigned groups"
+    test_ref: "manual — token inspection (jwt.io or similar)"
+  - id: AC-3
+    description: "Access denied for user not in application's bound groups"
+    test_ref: "manual — attempt login to app user is not bound to"
+
+tasks:
+  - id: T-1
+    title: "Create test user with multiple group memberships"
+    done: false
+  - id: T-2
+    title: "Log in as test user and obtain JWT token"
+    done: false
+  - id: T-3
+    title: "Inspect JWT — verify groups claim matches assigned groups"
+    done: false
+  - id: T-4
+    title: "Test access denial — user not in bound group is blocked"
+    done: false
+  - id: T-5
+    title: "Document token structure and validation results in progress.md"
+    done: false
+
+agent_config:
+  model: claude-opus-4-6
+  max_turns: 20
+  tools: [Bash, Read, Write, Edit]

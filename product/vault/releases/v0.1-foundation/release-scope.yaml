@@ -1,0 +1,24 @@
+release: v0.1
+title: "Foundation"
+status: pre_g1
+goal: |
+  Complete Authentik deployment with Google OAuth, full group taxonomy,
+  and OIDC providers for first two consumers. Validate JWT groups claim.
+
+epics_in_scope:
+  - epic: EPIC-001
+    features:
+      - feature: FEAT-001-01
+        stories:
+          - STORY-001-01-01
+          - STORY-001-01-02
+          - STORY-001-01-03
+      - feature: FEAT-001-02
+        stories:
+          - STORY-001-02-01
+          - STORY-001-02-02
+          - STORY-001-02-03
+
+total_stories: 6
+estimated_days: 6
+cost_budget_usd: 6.00

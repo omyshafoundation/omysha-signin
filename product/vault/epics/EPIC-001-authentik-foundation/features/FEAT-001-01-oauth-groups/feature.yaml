@@ -1,0 +1,41 @@
+id: FEAT-001-01
+epic: EPIC-001
+title: "Google OAuth Source and Group Taxonomy"
+status: planned
+owner: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+created: 2026-03-10
+created_by: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+
+releases_containing_this_feature:
+  - v0.1
+
+what: |
+  Configure Google as the upstream identity provider via OAuth2/OIDC brokering.
+  Create all groups per the IAM PRD role taxonomy: identity groups, team groups,
+  council groups, and system-level groups. Add UPDSS-specific groups for
+  dashboard authorization. Validate login flow and group assignment.
+
+stories:
+  - STORY-001-01-01  # Initial admin setup and local validation
+  - STORY-001-01-02  # Google OAuth source configuration
+  - STORY-001-01-03  # Group taxonomy creation
+
+acceptance_criteria:
+  - id: AC-1
+    description: "Google OAuth login works on local Authentik instance"
+    test_ref: "manual — login flow test"
+  - id: AC-2
+    description: "All IAM PRD groups created and visible in Authentik admin"
+    test_ref: "manual — group list verification"
+
+constraints:
+  - "Google Cloud Console OAuth credentials required (human provides)"
+  - "Email allowlist enforcement — only pre-approved emails during enrollment"
+  - "Follow IAM PRD group naming exactly (colon-delimited prefixes)"
+
+out_of_scope:
+  - "OIDC provider creation — that is FEAT-001-02"
+  - "Production deployment — local-first, then mirror to production"
+
+depends_on: []
+open_questions: []

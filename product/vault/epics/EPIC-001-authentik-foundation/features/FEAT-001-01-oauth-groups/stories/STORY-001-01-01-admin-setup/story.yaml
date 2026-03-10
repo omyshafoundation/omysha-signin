@@ -1,0 +1,74 @@
+metadata:
+  id: STORY-001-01-01
+  feature: FEAT-001-01
+  epic: EPIC-001
+  title: "Complete initial admin setup and validate local Authentik stack"
+  status: planned
+  owner: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+  created: 2026-03-10
+  created_by: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+  release: v0.1
+  estimated_days: 1
+  cost_budget_usd: 0.50
+
+what: |
+  Complete the Authentik initial admin setup flow at http://localhost:3008/if/flow/initial-setup/.
+  Set admin username and password. Verify the admin dashboard is accessible at
+  http://localhost:3008/if/admin/. Confirm all 4 containers are healthy.
+  Document the setup completion in progress.md.
+
+  This is primarily manual work guided by the agent.
+
+why: |
+  The initial admin setup is the prerequisite for all other Authentik configuration.
+  Without a configured admin account, no groups, providers, or sources can be created.
+
+constraints:
+  - "This is a one-time setup — cannot be repeated once completed"
+  - "Admin credentials must not be stored in any file committed to git"
+  - "Docker stack must be running before starting (docker compose up -d)"
+
+out_of_scope:
+  - "Google OAuth configuration — that is STORY-001-01-02"
+  - "Group creation — that is STORY-001-01-03"
+  - "Production setup — local only in this story"
+
+security:
+  auth_required: true
+  data_classification: confidential
+  input_validation: none
+  specific_requirements:
+    - "Admin credentials must be strong — never stored in version control"
+    - "Initial setup URL expires after first use"
+
+depends_on: []
+blocks:
+  - STORY-001-01-02
+  - STORY-001-01-03
+
+acceptance_criteria:
+  - id: AC-1
+    description: "Admin can log in to http://localhost:3008/if/admin/"
+    test_ref: "manual — admin login test"
+  - id: AC-2
+    description: "All 4 containers healthy (server, worker, db, redis)"
+    test_ref: "docker ps healthcheck"
+
+tasks:
+  - id: T-1
+    title: "Verify Docker stack is running and all containers healthy"
+    done: false
+  - id: T-2
+    title: "Navigate to initial-setup URL and complete admin account creation"
+    done: false
+  - id: T-3
+    title: "Log in to admin dashboard and verify access"
+    done: false
+  - id: T-4
+    title: "Document completion in progress.md"
+    done: false
+
+agent_config:
+  model: claude-opus-4-6
+  max_turns: 10
+  tools: [Bash, Read, Write, Edit]

@@ -1,0 +1,41 @@
+# EPIC-001: Authentik Foundation
+id: EPIC-001
+title: "Authentik Foundation — deploy, configure, and validate centralised IAM"
+status: pre_g1
+owner: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+created: 2026-03-10
+created_by: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+
+goal: |
+  Complete Authentik deployment with Google OAuth brokering, full group taxonomy
+  per IAM PRD, and OIDC providers for the first two consumer applications
+  (Secretariat System and UPDSS Dashboard). Validate JWT groups claim flows
+  correctly to consumers.
+
+background: |
+  Authentik was deployed to production (signin.omysha.org) on 2026-03-02.
+  Post-deployment configuration is pending: Google OAuth source, groups,
+  OIDC providers. This EPIC completes that work and validates the full
+  authentication flow end-to-end. The IAM PRD defines the complete role
+  taxonomy and integration requirements.
+
+acceptance_criteria_long_term:
+  - "Google OAuth login works — users authenticate via Google, Authentik brokers identity"
+  - "All groups from IAM PRD created — identity, team, council, system-level"
+  - "UPDSS-specific groups exist — sys:updss:admin, sys:updss:developer, sys:updss:viewer"
+  - "At least one OIDC provider configured and validated with JWT groups claim"
+  - "Production environment at signin.omysha.org matches local configuration"
+
+features:
+  - FEAT-001-01  # Google OAuth and Group Taxonomy
+  - FEAT-001-02  # OIDC Application Providers
+
+releases:
+  v0.1:
+    features_in_scope: [FEAT-001-01, FEAT-001-02]
+    status: pre_g1
+    notes: "Foundation release — complete post-deployment config and validate"
+
+depends_on: []
+blocks: []
+open_questions: []

@@ -1,0 +1,109 @@
+metadata:
+  id: STORY-001-01-03
+  feature: FEAT-001-01
+  epic: EPIC-001
+  title: "Create full group taxonomy per IAM PRD and UPDSS roles"
+  status: planned
+  owner: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+  created: 2026-03-10
+  created_by: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+  release: v0.1
+  estimated_days: 1
+  cost_budget_usd: 1.00
+
+what: |
+  Create all Authentik groups per the IAM PRD role taxonomy (Section 6):
+
+  Identity groups:
+  - internal:sankle
+  - external:advisor
+  - external:collaborator
+
+  Team groups:
+  - team:Growth, team:MarketingPR, team:CommunityBuilding, team:TechProducts
+  - team:Enablers, team:ResearchAnalysisBureau, team:ContentResearch
+
+  Council groups:
+  - council:Governance, council:Management, council:Operational
+
+  System groups (existing apps):
+  - sys:secretariat:admin, sys:secretariat:member
+  - sys:frappe:admin, sys:frappe:user
+  - sys:github:maintainer
+  - sys:tracker:admin
+
+  UPDSS-specific groups (new):
+  - sys:updss:admin — full dashboard access, gate approval, release management
+  - sys:updss:developer — job submission, dashboard viewing, cannot approve G3
+  - sys:updss:viewer — read-only dashboard access
+
+  Create all groups via Authentik Admin → Directory → Groups.
+  Verify all groups are visible and correctly named.
+
+why: |
+  The group taxonomy is the authorisation backbone. JWT tokens carry group
+  memberships as claims, and downstream applications use these claims to
+  determine access and permissions. Without groups, no role-based access
+  control is possible.
+
+constraints:
+  - "Follow IAM PRD group naming exactly — colon-delimited prefixes"
+  - "Groups are additive — permissions are the union of all groups (IAM PRD FR-11)"
+  - "Application binding is deny-by-default (IAM PRD FR-10)"
+
+out_of_scope:
+  - "User creation — separate operational process"
+  - "Application binding — that is FEAT-001-02"
+  - "Permission enforcement in UPDSS — that is EPIC-015 in the UPDSS repo"
+
+security:
+  auth_required: true
+  data_classification: internal
+  input_validation: none
+  specific_requirements:
+    - "Admin delegation tiers respected per IAM PRD Section 6.5"
+
+depends_on:
+  - STORY-001-01-01
+blocks:
+  - STORY-001-02-01
+  - STORY-001-02-02
+
+acceptance_criteria:
+  - id: AC-1
+    description: "All 3 identity groups created"
+    test_ref: "manual — Authentik admin group list"
+  - id: AC-2
+    description: "All 7 team groups created"
+    test_ref: "manual — Authentik admin group list"
+  - id: AC-3
+    description: "All 3 council groups created"
+    test_ref: "manual — Authentik admin group list"
+  - id: AC-4
+    description: "All system groups created (6 existing + 3 UPDSS)"
+    test_ref: "manual — Authentik admin group list"
+
+tasks:
+  - id: T-1
+    title: "Create identity groups (internal:sankle, external:advisor, external:collaborator)"
+    done: false
+  - id: T-2
+    title: "Create team groups (7 teams)"
+    done: false
+  - id: T-3
+    title: "Create council groups (3 councils)"
+    done: false
+  - id: T-4
+    title: "Create system groups — existing apps (6 groups)"
+    done: false
+  - id: T-5
+    title: "Create UPDSS-specific groups (sys:updss:admin, developer, viewer)"
+    done: false
+  - id: T-6
+    title: "Verify all groups visible in admin and document in progress.md"
+    done: false
+
+agent_config:
+  model: claude-opus-4-6
+  max_turns: 15
+  tools: [Bash, Read, Write, Edit]

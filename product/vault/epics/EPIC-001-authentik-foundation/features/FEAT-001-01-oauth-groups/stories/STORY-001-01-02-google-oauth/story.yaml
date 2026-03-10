@@ -1,0 +1,81 @@
+metadata:
+  id: STORY-001-01-02
+  feature: FEAT-001-01
+  epic: EPIC-001
+  title: "Configure Google OAuth2 source for identity brokering"
+  status: planned
+  owner: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+  created: 2026-03-10
+  created_by: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+  release: v0.1
+  estimated_days: 1
+  cost_budget_usd: 1.00
+
+what: |
+  Configure Google as an OAuth2/OIDC identity source in Authentik.
+  In Authentik Admin → Directory → Federation & Social Login, add a Google Source:
+  - Client ID and Secret from Google Cloud Console OAuth 2.0 credentials
+  - Redirect URI: http://localhost:3008/source/oauth/callback/google/ (local)
+  - Disable "Allow users to enroll" — use allowlist instead
+  - Validate the full login flow: user clicks "Login with Google" → Google authenticates
+    → Authentik receives callback → user session established.
+
+  Requires Google Cloud Console OAuth credentials (human provides).
+
+why: |
+  Google OAuth brokering is the primary authentication method per IAM PRD FR-06.
+  Members authenticate with their existing Google accounts — no new passwords.
+  This is the foundation for all subsequent SSO integrations.
+
+constraints:
+  - "Google Cloud Console OAuth credentials required — human must provide Client ID and Secret"
+  - "Local redirect URI: http://localhost:3008/source/oauth/callback/google/"
+  - "Production redirect URI (for later): https://signin.omysha.org/source/oauth/callback/google/"
+  - "Follow IAM PRD FR-02, FR-04 (email allowlist enforcement)"
+
+out_of_scope:
+  - "MFA setup — future enhancement per IAM PRD FR-08"
+  - "Production Google OAuth config — this story is local only"
+  - "User provisioning — separate operational process"
+
+security:
+  auth_required: true
+  data_classification: confidential
+  input_validation: required
+  specific_requirements:
+    - "Google Client Secret must never be stored in version control"
+    - "Email allowlist must be enforced — unapproved emails rejected"
+
+depends_on:
+  - STORY-001-01-01
+blocks: []
+
+acceptance_criteria:
+  - id: AC-1
+    description: "Google OAuth source visible in Authentik Federation & Social Login"
+    test_ref: "manual — admin UI verification"
+  - id: AC-2
+    description: "Login with Google button appears on Authentik login page"
+    test_ref: "manual — login page check"
+  - id: AC-3
+    description: "Full login flow works — Google auth → Authentik callback → session"
+    test_ref: "manual — end-to-end login test"
+
+tasks:
+  - id: T-1
+    title: "Obtain Google Cloud Console OAuth credentials from human"
+    done: false
+  - id: T-2
+    title: "Configure Google OAuth2 Source in Authentik admin"
+    done: false
+  - id: T-3
+    title: "Validate login flow — Google auth to Authentik session"
+    done: false
+  - id: T-4
+    title: "Document configuration and validation in progress.md"
+    done: false
+
+agent_config:
+  model: claude-opus-4-6
+  max_turns: 15
+  tools: [Bash, Read, Write, Edit]
