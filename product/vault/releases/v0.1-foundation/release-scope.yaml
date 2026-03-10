@@ -1,6 +1,6 @@
 release: v0.1
 title: "Foundation"
-status: pre_g1
+status: g1_approved
 goal: |
   Complete Authentik deployment with Google OAuth, full group taxonomy,
   and OIDC providers for first two consumers. Validate JWT groups claim.

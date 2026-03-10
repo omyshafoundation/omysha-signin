@@ -1,7 +1,7 @@
 # EPIC-001: Authentik Foundation
 id: EPIC-001
 title: "Authentik Foundation — deploy, configure, and validate centralised IAM"
-status: pre_g1
+status: g1_approved
 owner: "Nitin Dhawan (gtalk.nitin@gmail.com)"
 created: 2026-03-10
 created_by: "Nitin Dhawan (gtalk.nitin@gmail.com)"
@@ -33,7 +33,7 @@ features:
 releases:
   v0.1:
     features_in_scope: [FEAT-001-01, FEAT-001-02]
-    status: pre_g1
+    status: g1_approved
     notes: "Foundation release — complete post-deployment config and validate"
 
 depends_on: []
