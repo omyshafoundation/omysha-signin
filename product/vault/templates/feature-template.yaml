@@ -1,0 +1,52 @@
+# Feature Template
+# doc_id:     VAULT-FEAT-NNN-YY
+# template:   feature-template.yaml (methodology/templates)
+# version:    4.0.0
+# created:    YYYY-MM-DD
+# created_by: [Full Name] ([git-email])
+# ---
+
+id: FEAT-NNN-YY
+epic: EPIC-NNN
+title: "[Feature title — deliverable capability]"
+status: planned                    # planned | in_progress | completed | deferred | cancelled
+owner: "[Full Name] ([git-email])"
+created: YYYY-MM-DD
+created_by: "[Full Name] ([git-email])"
+
+releases_containing_this_feature:
+  - vX.Y                             # List every release that includes work for this feature
+
+what: |
+  [What does this feature deliver? 2–4 sentences.
+  Must be concrete enough to write stories from.]
+
+# Stories (populated during Pre-G1)
+stories: []                        # STORY-NNN-YY-ZZ references
+
+# Acceptance criteria (Feature-level)
+acceptance_criteria:
+  - id: AC-1
+    description: "[Criteria that must be true when Feature is complete]"
+    test_ref: "[test file or test ID]"
+
+# Constraints
+constraints:
+  - "[Any technical or business constraints applying to this feature]"
+
+out_of_scope:
+  - "[Explicitly not in this feature]"
+  - "[Another out-of-scope item]"
+
+# Dependencies
+depends_on: []                    # FEAT-NNN-YY or STORY-NNN-YY-ZZ references
+
+# Notes
+open_questions: []                # Must be empty at G1
+
+# ---
+# CHANGELOG
+# Version | Date       | Author                              | Changes
+# 4.0.0   | 2026-03-06 | Nitin Dhawan (gtalk.nitin@gmail.com)  | v4.0.0: removed blocks field
+# 1.1.0   | 2026-03-05 | Coding Agent (STORY-001-01-04)       | Aligned field names to methodology 02.3: description->what, release->releases_containing_this_feature
+# 1.0.0   | YYYY-MM-DD | [Full Name] ([git-email])           | Initial creation

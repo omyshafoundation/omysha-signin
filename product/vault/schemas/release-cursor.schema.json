@@ -1,0 +1,138 @@
+{
+  "$defs": {
+    "StoriesByPhase": {
+      "additionalProperties": true,
+      "description": "Story categorisation by phase in a release cursor.",
+      "properties": {
+        "planned": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Planned",
+          "type": "array"
+        },
+        "g1_approved": {
+          "items": {
+            "type": "string"
+          },
+          "title": "G1 Approved",
+          "type": "array"
+        },
+        "in_progress": {
+          "items": {
+            "type": "string"
+          },
+          "title": "In Progress",
+          "type": "array"
+        },
+        "done": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Done",
+          "type": "array"
+        }
+      },
+      "title": "StoriesByPhase",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "Release-level cursor.yaml tracking release progress.",
+  "properties": {
+    "release": {
+      "title": "Release",
+      "type": "string"
+    },
+    "status": {
+      "title": "Status",
+      "type": "string"
+    },
+    "current_gate": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Current Gate"
+    },
+    "stories_by_phase": {
+      "$ref": "#/$defs/StoriesByPhase"
+    },
+    "cost_usd_total": {
+      "default": 0.0,
+      "minimum": 0,
+      "title": "Cost Usd Total",
+      "type": "number"
+    },
+    "cost_usd_budget": {
+      "default": 0.0,
+      "minimum": 0,
+      "title": "Cost Usd Budget",
+      "type": "number"
+    },
+    "last_updated": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Last Updated"
+    },
+    "released_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Released At"
+    },
+    "g1_approved_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "G1 Approved By"
+    },
+    "g1_approved_date": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "G1 Approved Date"
+    }
+  },
+  "required": [
+    "release",
+    "status",
+    "stories_by_phase"
+  ],
+  "title": "ReleaseCursor",
+  "type": "object"
+}

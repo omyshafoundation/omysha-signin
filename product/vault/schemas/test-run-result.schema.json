@@ -1,0 +1,217 @@
+{
+  "$defs": {
+    "TestCoverage": {
+      "additionalProperties": true,
+      "description": "Code coverage data from a test run.",
+      "properties": {
+        "line_pct": {
+          "default": 0.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Line Pct",
+          "type": "number"
+        },
+        "branch_pct": {
+          "default": 0.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Branch Pct",
+          "type": "number"
+        },
+        "threshold_met": {
+          "default": false,
+          "title": "Threshold Met",
+          "type": "boolean"
+        }
+      },
+      "title": "TestCoverage",
+      "type": "object"
+    },
+    "TestResults": {
+      "additionalProperties": true,
+      "description": "Aggregate test result counts.",
+      "properties": {
+        "total": {
+          "default": 0,
+          "title": "Total",
+          "type": "integer"
+        },
+        "passed": {
+          "default": 0,
+          "title": "Passed",
+          "type": "integer"
+        },
+        "failed": {
+          "default": 0,
+          "title": "Failed",
+          "type": "integer"
+        },
+        "skipped": {
+          "default": 0,
+          "title": "Skipped",
+          "type": "integer"
+        },
+        "errors": {
+          "default": 0,
+          "title": "Errors",
+          "type": "integer"
+        }
+      },
+      "title": "TestResults",
+      "type": "object"
+    },
+    "TestRunMetadata": {
+      "additionalProperties": true,
+      "description": "Metadata about the test runner environment.",
+      "properties": {
+        "pytest_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pytest Version"
+        },
+        "plugins": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Plugins",
+          "type": "array"
+        }
+      },
+      "title": "TestRunMetadata",
+      "type": "object"
+    },
+    "TestStoryBreakdown": {
+      "additionalProperties": true,
+      "description": "Per-story test breakdown in a test run result.",
+      "properties": {
+        "story_id": {
+          "title": "Story Id",
+          "type": "string"
+        },
+        "tests_run": {
+          "default": 0,
+          "title": "Tests Run",
+          "type": "integer"
+        },
+        "passed": {
+          "default": 0,
+          "title": "Passed",
+          "type": "integer"
+        },
+        "failed": {
+          "default": 0,
+          "title": "Failed",
+          "type": "integer"
+        },
+        "failures": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Failures",
+          "type": "array"
+        }
+      },
+      "required": [
+        "story_id"
+      ],
+      "title": "TestStoryBreakdown",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "Test run result file (test-run-result-*.yaml).",
+  "properties": {
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "release": {
+      "title": "Release",
+      "type": "string"
+    },
+    "machine_id": {
+      "title": "Machine Id",
+      "type": "string"
+    },
+    "timestamp": {
+      "title": "Timestamp",
+      "type": "string"
+    },
+    "duration_seconds": {
+      "default": 0.0,
+      "title": "Duration Seconds",
+      "type": "number"
+    },
+    "python_version": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Python Version"
+    },
+    "os": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Os"
+    },
+    "results": {
+      "$ref": "#/$defs/TestResults"
+    },
+    "coverage": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TestCoverage"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "stories": {
+      "items": {
+        "$ref": "#/$defs/TestStoryBreakdown"
+      },
+      "title": "Stories",
+      "type": "array"
+    },
+    "metadata": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TestRunMetadata"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "run_id",
+    "release",
+    "machine_id",
+    "timestamp"
+  ],
+  "title": "TestRunResult",
+  "type": "object"
+}

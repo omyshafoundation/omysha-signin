@@ -1,0 +1,280 @@
+{
+  "$defs": {
+    "ChecklistItem": {
+      "additionalProperties": true,
+      "description": "A single checklist item in a gate review.",
+      "properties": {
+        "item": {
+          "title": "Item",
+          "type": "string"
+        },
+        "pass": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pass"
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Notes"
+        }
+      },
+      "required": [
+        "item"
+      ],
+      "title": "ChecklistItem",
+      "type": "object"
+    },
+    "GateReviewContent": {
+      "additionalProperties": true,
+      "description": "Review content within a gate review file.\n\nThe review block varies significantly between releases:\n- Some have structured checklist items\n- Some have flat key-value pairs (g1_approved, all_stories_done, etc.)\n- All have stories_reviewed and/or summary",
+      "properties": {
+        "stories_reviewed": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stories Reviewed"
+        },
+        "checklist": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/ChecklistItem"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Checklist"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Summary"
+        },
+        "g1_approved": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "G1 Approved"
+        },
+        "g2_approved": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "G2 Approved"
+        },
+        "retrospective_written": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Retrospective Written"
+        },
+        "release_plans_updated": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Release Plans Updated"
+        },
+        "all_stories_done": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "All Stories Done"
+        },
+        "build_passes": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Build Passes"
+        },
+        "tests_pass": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tests Pass"
+        },
+        "test_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Test Count"
+        },
+        "cost_within_budget": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cost Within Budget"
+        }
+      },
+      "title": "GateReviewContent",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "Gate review file (G1.yaml, G2.yaml, G3.yaml).\n\nDecision may be null when the gate is pending human review.",
+  "properties": {
+    "gate": {
+      "title": "Gate",
+      "type": "string"
+    },
+    "release": {
+      "title": "Release",
+      "type": "string"
+    },
+    "date": {
+      "default": null,
+      "title": "Date"
+    },
+    "reviewer": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reviewer"
+    },
+    "review": {
+      "$ref": "#/$defs/GateReviewContent"
+    },
+    "decision": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Decision"
+    },
+    "conditions": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Conditions"
+    },
+    "rejection_rework_notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rejection Rework Notes"
+    }
+  },
+  "required": [
+    "gate",
+    "release",
+    "review"
+  ],
+  "title": "GateReview",
+  "type": "object"
+}

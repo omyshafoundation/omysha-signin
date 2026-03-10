@@ -1,0 +1,290 @@
+{
+  "$defs": {
+    "ReleaseRisk": {
+      "additionalProperties": true,
+      "description": "A risk entry with mitigation.",
+      "properties": {
+        "risk": {
+          "title": "Risk",
+          "type": "string"
+        },
+        "mitigation": {
+          "title": "Mitigation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "risk",
+        "mitigation"
+      ],
+      "title": "ReleaseRisk",
+      "type": "object"
+    },
+    "ReleaseScopeEpicNew": {
+      "additionalProperties": true,
+      "description": "Epic reference in new-format release-scope (v0.3+).",
+      "properties": {
+        "epic_id": {
+          "title": "Epic Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "features": {
+          "items": {
+            "$ref": "#/$defs/ReleaseScopeFeatureNew"
+          },
+          "title": "Features",
+          "type": "array"
+        }
+      },
+      "required": [
+        "epic_id",
+        "name",
+        "features"
+      ],
+      "title": "ReleaseScopeEpicNew",
+      "type": "object"
+    },
+    "ReleaseScopeEpicOld": {
+      "additionalProperties": true,
+      "description": "Epic reference in old-format release-scope (v0.1).",
+      "properties": {
+        "epic": {
+          "title": "Epic",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "features": {
+          "items": {
+            "$ref": "#/$defs/ReleaseScopeFeatureOld"
+          },
+          "title": "Features",
+          "type": "array"
+        }
+      },
+      "required": [
+        "epic",
+        "title",
+        "features"
+      ],
+      "title": "ReleaseScopeEpicOld",
+      "type": "object"
+    },
+    "ReleaseScopeFeatureNew": {
+      "additionalProperties": true,
+      "description": "Feature reference in new-format release-scope (v0.3+).",
+      "properties": {
+        "feature_id": {
+          "title": "Feature Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "stories": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Stories",
+          "type": "array"
+        }
+      },
+      "required": [
+        "feature_id",
+        "name",
+        "stories"
+      ],
+      "title": "ReleaseScopeFeatureNew",
+      "type": "object"
+    },
+    "ReleaseScopeFeatureOld": {
+      "additionalProperties": true,
+      "description": "Feature reference in old-format release-scope (v0.1).",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "stories": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Stories",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "stories"
+      ],
+      "title": "ReleaseScopeFeatureOld",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "Release-scope.yaml \u2014 defines which stories are in scope for a release.\n\nSupports two formats:\n- Old (v0.1): uses ``epics_in_scope`` with ``epic``/``id`` keys, ``risks`` as list of strings\n- New (v0.3+): uses ``epics`` with ``epic_id``/``feature_id`` keys, ``risks`` as list of dicts",
+  "properties": {
+    "release": {
+      "title": "Release",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "status": {
+      "title": "Status",
+      "type": "string"
+    },
+    "appetite": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Appetite"
+    },
+    "goal": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Goal"
+    },
+    "date_started": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Date Started"
+    },
+    "date_released": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Date Released"
+    },
+    "epics": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/ReleaseScopeEpicNew"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Epics"
+    },
+    "epics_in_scope": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/ReleaseScopeEpicOld"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Epics In Scope"
+    },
+    "risks": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/ReleaseRisk"
+          },
+          "type": "array"
+        },
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Risks"
+    },
+    "total_stories": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Total Stories"
+    },
+    "stories_done": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Stories Done"
+    }
+  },
+  "required": [
+    "release",
+    "name",
+    "status"
+  ],
+  "title": "ReleaseScope",
+  "type": "object"
+}

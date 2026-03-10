@@ -1,0 +1,383 @@
+{
+  "$defs": {
+    "AgentRuntime": {
+      "additionalProperties": true,
+      "description": "Agent runtime configuration for a machine.",
+      "properties": {
+        "type": {
+          "default": "claude-code",
+          "title": "Type",
+          "type": "string"
+        },
+        "cli_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cli Path"
+        },
+        "cli_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cli Version"
+        },
+        "validated": {
+          "default": false,
+          "title": "Validated",
+          "type": "boolean"
+        }
+      },
+      "title": "AgentRuntime",
+      "type": "object"
+    },
+    "MachineCapabilities": {
+      "additionalProperties": true,
+      "description": "Capability declaration for a machine.",
+      "properties": {
+        "repos": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Repos",
+          "type": "array"
+        },
+        "tools": {
+          "$ref": "#/$defs/MachineTools"
+        },
+        "resource_class": {
+          "default": "standard",
+          "title": "Resource Class",
+          "type": "string"
+        },
+        "availability_schedule": {
+          "default": "always",
+          "title": "Availability Schedule",
+          "type": "string"
+        },
+        "custom_schedule": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Custom Schedule"
+        }
+      },
+      "title": "MachineCapabilities",
+      "type": "object"
+    },
+    "MachineHeartbeat": {
+      "additionalProperties": true,
+      "description": "Heartbeat status for a machine.",
+      "properties": {
+        "interval_seconds": {
+          "default": 60,
+          "title": "Interval Seconds",
+          "type": "integer"
+        },
+        "last_heartbeat": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Heartbeat"
+        },
+        "last_heartbeat_commit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Heartbeat Commit"
+        },
+        "consecutive_misses": {
+          "default": 0,
+          "title": "Consecutive Misses",
+          "type": "integer"
+        }
+      },
+      "title": "MachineHeartbeat",
+      "type": "object"
+    },
+    "MachineSystem": {
+      "additionalProperties": true,
+      "description": "System information for a machine profile.",
+      "properties": {
+        "os": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Os"
+        },
+        "os_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Os Version"
+        },
+        "architecture": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Architecture"
+        },
+        "hostname": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hostname"
+        },
+        "cpu_cores": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Cores"
+        },
+        "ram_gb": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ram Gb"
+        },
+        "disk_free_gb": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Disk Free Gb"
+        },
+        "python_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Python Version"
+        }
+      },
+      "title": "MachineSystem",
+      "type": "object"
+    },
+    "MachineTimestamps": {
+      "additionalProperties": true,
+      "description": "Timestamps for machine lifecycle events.",
+      "properties": {
+        "registered": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Registered"
+        },
+        "last_updated": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Updated"
+        },
+        "deregistered": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Deregistered"
+        }
+      },
+      "title": "MachineTimestamps",
+      "type": "object"
+    },
+    "MachineTools": {
+      "additionalProperties": true,
+      "description": "Tool availability on a machine.",
+      "properties": {
+        "docker": {
+          "default": false,
+          "title": "Docker",
+          "type": "boolean"
+        },
+        "git": {
+          "default": false,
+          "title": "Git",
+          "type": "boolean"
+        },
+        "node": {
+          "default": false,
+          "title": "Node",
+          "type": "boolean"
+        },
+        "python": {
+          "default": false,
+          "title": "Python",
+          "type": "boolean"
+        }
+      },
+      "title": "MachineTools",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "Machine registration profile (MACHINE-*.yaml).",
+  "properties": {
+    "machine_id": {
+      "title": "Machine Id",
+      "type": "string"
+    },
+    "display_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Display Name"
+    },
+    "status": {
+      "default": "active",
+      "title": "Status",
+      "type": "string"
+    },
+    "system": {
+      "$ref": "#/$defs/MachineSystem"
+    },
+    "agent_runtime": {
+      "$ref": "#/$defs/AgentRuntime"
+    },
+    "capabilities": {
+      "$ref": "#/$defs/MachineCapabilities"
+    },
+    "heartbeat": {
+      "$ref": "#/$defs/MachineHeartbeat"
+    },
+    "current_job": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Current Job"
+    },
+    "current_story": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Current Story"
+    },
+    "jobs_completed": {
+      "default": 0,
+      "title": "Jobs Completed",
+      "type": "integer"
+    },
+    "jobs_failed": {
+      "default": 0,
+      "title": "Jobs Failed",
+      "type": "integer"
+    },
+    "timestamps": {
+      "$ref": "#/$defs/MachineTimestamps"
+    }
+  },
+  "required": [
+    "machine_id"
+  ],
+  "title": "MachineProfile",
+  "type": "object"
+}

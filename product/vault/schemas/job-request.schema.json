@@ -1,0 +1,351 @@
+{
+  "$defs": {
+    "JobExecution": {
+      "additionalProperties": true,
+      "description": "Execution parameters for a job request.",
+      "properties": {
+        "model": {
+          "default": "claude-sonnet-4-6",
+          "title": "Model",
+          "type": "string"
+        },
+        "max_turns": {
+          "default": 50,
+          "minimum": 1,
+          "title": "Max Turns",
+          "type": "integer"
+        },
+        "timeout_minutes": {
+          "default": 30,
+          "minimum": 1,
+          "title": "Timeout Minutes",
+          "type": "integer"
+        },
+        "resume_session": {
+          "default": false,
+          "title": "Resume Session",
+          "type": "boolean"
+        },
+        "dry_run": {
+          "default": false,
+          "title": "Dry Run",
+          "type": "boolean"
+        }
+      },
+      "title": "JobExecution",
+      "type": "object"
+    },
+    "JobRequester": {
+      "additionalProperties": true,
+      "description": "Requester identity for a job request.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "email": {
+          "title": "Email",
+          "type": "string"
+        },
+        "github_user": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Github User"
+        }
+      },
+      "required": [
+        "name",
+        "email"
+      ],
+      "title": "JobRequester",
+      "type": "object"
+    },
+    "JobRequirements": {
+      "additionalProperties": true,
+      "description": "Capability requirements for a job.",
+      "properties": {
+        "runtime": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Runtime"
+        },
+        "tools": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tools",
+          "type": "array"
+        },
+        "resource_class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resource Class"
+        },
+        "repos": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Repos",
+          "type": "array"
+        }
+      },
+      "title": "JobRequirements",
+      "type": "object"
+    },
+    "JobResult": {
+      "additionalProperties": true,
+      "description": "Execution result for a completed/failed job.",
+      "properties": {
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exit Code"
+        },
+        "duration_seconds": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Seconds"
+        },
+        "files_changed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Files Changed"
+        },
+        "commits_made": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Commits Made"
+        },
+        "cost_usd": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cost Usd"
+        },
+        "error_summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Summary"
+        },
+        "output_summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Output Summary"
+        }
+      },
+      "title": "JobResult",
+      "type": "object"
+    },
+    "JobTimestamps": {
+      "additionalProperties": true,
+      "description": "Timestamps for job lifecycle events.",
+      "properties": {
+        "submitted": {
+          "title": "Submitted",
+          "type": "string"
+        },
+        "started": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Started"
+        },
+        "completed": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completed"
+        }
+      },
+      "required": [
+        "submitted"
+      ],
+      "title": "JobTimestamps",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "Job request file (JOB-*.yaml) for the git-based execution queue.",
+  "properties": {
+    "job_id": {
+      "title": "Job Id",
+      "type": "string"
+    },
+    "version": {
+      "default": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "story_id": {
+      "title": "Story Id",
+      "type": "string"
+    },
+    "epic_id": {
+      "title": "Epic Id",
+      "type": "string"
+    },
+    "feature_id": {
+      "title": "Feature Id",
+      "type": "string"
+    },
+    "execution": {
+      "$ref": "#/$defs/JobExecution"
+    },
+    "requester": {
+      "$ref": "#/$defs/JobRequester"
+    },
+    "timestamps": {
+      "$ref": "#/$defs/JobTimestamps"
+    },
+    "state": {
+      "default": "pending",
+      "title": "State",
+      "type": "string"
+    },
+    "result": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/JobResult"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "priority": {
+      "default": "normal",
+      "title": "Priority",
+      "type": "string"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    },
+    "requires": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/JobRequirements"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "preferred_machine": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Preferred Machine"
+    }
+  },
+  "required": [
+    "job_id",
+    "story_id",
+    "epic_id",
+    "feature_id",
+    "requester",
+    "timestamps"
+  ],
+  "title": "JobRequest",
+  "type": "object"
+}

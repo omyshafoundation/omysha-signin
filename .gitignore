@@ -1,0 +1,31 @@
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE and local tools
+.vscode/
+.idea/
+*.swp
+*.swo
+.obsidian/
+.claude/
+
+# Docker volumes (if local)
+data/
+
+# Node (if any custom UI)
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Authentik media (mounted volume)
+media/
+certs/

@@ -1,0 +1,156 @@
+# story-template.yaml — Canonical story specification template
+# doc_id:     VAULT-STORY-NNN-YY-ZZ
+# template:   story-template.yaml (product/vault/templates/)
+# version:    4.1.0
+# created:    YYYY-MM-DD
+# created_by: [Full Name] ([git-email])
+#
+# Usage: Copy this file to your story folder as story.yaml.
+#        Replace all placeholder values (in brackets or UPPER_CASE).
+#        The template is valid YAML when placeholders are replaced with real values.
+#        Every field must be present — remove nothing, even if a list is empty.
+# ---
+
+# ─────────────────────────────────────────────
+# METADATA
+# ─────────────────────────────────────────────
+metadata:
+  id: STORY-NNN-YY-ZZ                    # Unique story ID. Format: STORY-NNN-YY-ZZ (EPIC-feature-story). Never reassigned.
+  feature: FEAT-NNN-YY                   # Parent feature ID. Format: FEAT-NNN-YY (EPIC-feature).
+  epic: EPIC-NNN                         # Parent epic ID.
+  title: "[Story title — user-facing value statement]"
+  status: planned                        # planned | g1_approved | in_progress | done
+  owner: "[Full Name] ([git-email])"     # Human owner responsible for the story spec.
+  created: YYYY-MM-DD
+  created_by: "[Full Name] ([git-email])"
+  release: vX.Y
+  estimated_days: 1                      # Range: 1-3. Stories > 3 days should be split.
+  cost_budget_usd: 0.00                  # Hard budget limit. Agent must escalate if exceeded.
+
+# ─────────────────────────────────────────────
+# WHAT / WHY / CONSTRAINTS / OUT_OF_SCOPE / SECURITY
+# ─────────────────────────────────────────────
+
+what: |
+  [Concrete description of what must be built.
+  Specific enough that an agent can implement it without asking questions.
+  Include file paths, function names, and expected behaviour where possible.]
+
+why: |
+  [Business context. What user problem does this solve?
+  What EPIC AC does this contribute to?
+  Why does this story matter for the release?]
+
+constraints:
+  - "[Which libraries to use (and which NOT to add)]"
+  - "[Where to store data (e.g. Redis, Postgres, filesystem)]"
+  - "[Which existing patterns to follow]"
+  - "[Performance requirements if non-trivial]"
+
+out_of_scope:
+  - "[Explicitly not in this story — reference where it IS planned]"
+  - "[Another out-of-scope item — at least 2 required]"
+
+security:
+  auth_required: false                   # true if this story touches authentication/authorization
+  data_classification: internal          # public | internal | confidential | restricted
+  input_validation: none                 # none | required
+  specific_requirements:
+    - "[Security requirement, e.g. 'Never log tokens or session IDs']"
+
+# ─────────────────────────────────────────────
+# UI REVIEW (REQUIRED for any story with UI/UX changes)
+# ─────────────────────────────────────────────
+#
+# *** HARD RULE: If this story changes anything a user sees (pages, components,
+# layouts, navigation, styles), ui_review MUST be populated. ***
+#
+# *** BLOCKING: Agents MUST NOT implement UI stories until the human has
+# approved the design at G1. This section must be filled BEFORE implementation
+# and approved by a human reviewer. ***
+
+# ui_review:
+#   level: layout_sketch             # layout_sketch | mockup
+#                                    #   layout_sketch — rough layout sketch or wireframe
+#                                    #   mockup        — high-fidelity mockup or design comp
+#   designs: []                      # REQUIRED — list of design file paths relative to story folder
+#                                    #   e.g. ["designs/search-input.png", "designs/table-layout.html"]
+#                                    #   Agents MUST create design files and store them in a designs/
+#                                    #   subfolder within the story directory BEFORE requesting G1.
+#                                    #   Acceptable formats: PNG, SVG, HTML mockup, PDF
+#                                    #   Text descriptions alone are NOT sufficient — the human needs
+#                                    #   to see the actual proposed UI, not read about it.
+#   detail: |
+#     [Brief context for the designs — what changed and why.
+#      NOT a substitute for the design files — just supplementary notes.]
+#   g1_approved_by: ~               # Human reviewer name — filled at G1
+#   g1_approved_date: ~             # YYYY-MM-DD — filled at G1
+#   g2_walkthrough_by: ~            # Human who walked through running UI — filled at G2
+#   g2_walkthrough_date: ~          # YYYY-MM-DD — filled at G2
+#
+# Design file rules:
+#   - Design files MUST be stored in a designs/ subfolder within the story directory
+#     e.g. vault/epics/EPIC-NNN/features/FEAT-NNN-YY/stories/STORY-NNN-YY-ZZ/designs/
+#   - The designs field MUST list all files — unlisted files are not reviewed
+#   - The human reviews these files at G1. No implementation begins until approved.
+#   - Agents generate the designs (HTML mockups, wireframes, annotated screenshots)
+#     and present them to the human for approval.
+#
+# Gate integration:
+#   G1: Human reviews design FILES (not descriptions) BEFORE agents implement.
+#       No agent may begin work on a UI story without g1_approved_by set.
+#   G2: Human walks through the RUNNING implementation (not screenshots).
+#       Agent cannot approve its own UI. g2_walkthrough_by must be a human.
+
+# ─────────────────────────────────────────────
+# ACCEPTANCE CRITERIA
+# ─────────────────────────────────────────────
+
+acceptance_criteria:
+  - id: AC-1
+    given: "[Precondition — system state before the action]"
+    when: "[Action — what the user or system does]"
+    then: "[Expected outcome — observable, testable result]"
+    test_ref: "[Exact test path]"
+  - id: AC-2
+    description: "[What must be true — use this format for structural stories]"
+    test_ref: "[test path or 'manual: description of manual check']"
+
+# ─────────────────────────────────────────────
+# TASKS
+# ─────────────────────────────────────────────
+
+tasks:
+  - id: T-1
+    description: "[First atomic implementation step]"
+    status: pending                      # pending | in_progress | done
+  - id: T-2
+    description: "[Second atomic implementation step]"
+    status: pending
+
+# ─────────────────────────────────────────────
+# DEPENDENCIES & OPEN QUESTIONS
+# ─────────────────────────────────────────────
+
+depends_on: []                           # STORY-NNN-YY-ZZ or FEAT-NNN-YY — must be done to unblock this
+
+open_questions: []                       # Must be empty at G1 approval.
+
+# ─────────────────────────────────────────────
+# AGENT CONFIG
+# ─────────────────────────────────────────────
+
+agent_config:
+  model: claude-sonnet-4-6
+  tools_permitted: [Bash, Read, Write, Edit, Glob, Grep]
+  tools_denied: [WebFetch, WebSearch, Task]
+  max_turns: 50
+
+# ---
+# CHANGELOG
+# Version | Date       | Author                              | Changes
+# 4.2.0   | 2026-03-08 | Claude Code (Opus 4.6)               | Strengthened ui_review: now REQUIRED (not optional) for UI stories; added g1_approved_by/date and g2_walkthrough_by/date fields; added BLOCKING prerequisite language — agents must not implement before human approval
+# 4.1.0   | 2026-03-08 | Process Architect (STORY-012-04-01)  | Added optional ui_review field with 3 levels (description, layout_sketch, mockup) and gate integration notes
+# 4.0.0   | 2026-03-06 | Nitin Dhawan (gtalk.nitin@gmail.com) | v4.0.0 simplification: removed blocks, handoffs, context_requirements, assigned_to; flattened agent_config to single role; simplified status to 4 values
+# 2.0.0   | 2026-03-05 | Coding Agent (STORY-001-01-02)       | Full rewrite: added assigned_to, structured security, given/when/then AC format, full status lifecycle, comprehensive inline comments for all 13+ fields
+# 1.0.0   | 2026-03-04 | Nitin Dhawan (gtalk.nitin@gmail.com) | Initial creation

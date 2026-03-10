@@ -1,0 +1,52 @@
+# Release Scope Template
+# doc_id:     VAULT-SCOPE-XY
+# template:   release-scope-template.yaml
+# version:    4.0.0
+# created:    YYYY-MM-DD
+# created_by: [Full Name] ([git-email])
+#
+# PURPOSE: Lists which EPICs / Features / Stories from vault/epics/ are in scope
+#          for this release. This is a reference document — no story content is
+#          duplicated here. The story definitions live in vault/epics/.
+#
+# RULE: Orchestrator reads this file to know which stories to execute.
+#       Never duplicate story.yaml content here.
+# ---
+
+release: vX.Y
+name: "[Release name]"
+appetite: "[e.g. 4-week cycle]"
+status: planned
+# status values: planned | g1_approved | in_progress | done | released
+
+goal: |
+  [What must be true when this release ships?
+  2-5 bullet points. Ties to EPIC objectives.]
+
+risks:
+  - risk: "[Risk description]"
+    mitigation: "[How the risk is mitigated]"
+
+epics_in_scope:
+  - epic: EPIC-NNN
+    title: "[Epic title]"
+    features:
+      - id: FEAT-NNN
+        title: "[Feature title]"
+        stories:
+          - STORY-NNN   # [Story title — one line comment]
+          - STORY-NNN   # [Story title]
+
+  - epic: EPIC-NNN
+    title: "[Epic title]"
+    features:
+      - id: FEAT-NNN
+        title: "[Feature title]"
+        stories:
+          - STORY-NNN   # [Story title]
+
+# ---
+# CHANGELOG
+# Version | Date       | Author                    | Changes
+# 4.0.0   | 2026-03-06 | Nitin Dhawan (gtalk.nitin@gmail.com) | v4.0.0: added goal, risks fields; absorbed release-template.md content; updated status values
+# 1.0.0   | YYYY-MM-DD | [Full Name] ([git-email]) | Initial scope defined

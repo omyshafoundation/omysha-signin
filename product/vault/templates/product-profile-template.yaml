@@ -1,0 +1,109 @@
+# product-profile-template.yaml — Canonical product profile template
+# doc_id:     VAULT-PROFILE-NNN
+# template:   product-profile-template.yaml (product/vault/templates/)
+# version:    1.0.0
+# created:    YYYY-MM-DD
+# created_by: [Full Name] ([git-email])
+#
+# Usage: Copy this file to product/vault/registry/ as {product-id}.yaml.
+#        Replace all placeholder values (in brackets or UPPER_CASE).
+#        The template is valid YAML when placeholders are replaced with real values.
+#        Every field must be present — remove nothing, even if a list is empty.
+#
+# IMPORTANT: Do NOT store credentials, API keys, tokens, or passwords in this file.
+# Secrets belong in environment variables, vault secrets managers, or GitHub Secrets.
+# ---
+
+# ─────────────────────────────────────────────
+# IDENTITY
+# ─────────────────────────────────────────────
+identity:
+  name: "[Product name]"                    # Human-readable product name
+  id: "[product-id]"                        # Lowercase, hyphenated unique ID (e.g. updss, omysha-web)
+  description: "[What this product does]"   # 1-2 sentence summary of the product's purpose
+  repo_url: "[GitHub repo URL]"             # Full HTTPS URL to the source repository
+  team: "[Team name]"                       # Owning team within Omysha
+  status: active                            # active | maintenance | archived
+  created: YYYY-MM-DD                       # Date the product was first registered
+  owner: "[Full Name] ([git-email])"        # Primary human owner responsible for this product
+
+# ─────────────────────────────────────────────
+# ENVIRONMENTS
+# ─────────────────────────────────────────────
+environments:
+  local:
+    url: "http://localhost:PORT"             # Local development URL with port number
+    setup_doc: "[path to local setup docs]" # Relative path to local environment setup instructions
+  test:
+    url: "https://test.{app}.omysha.org"    # Test/staging environment URL
+    hosting: "[Hosting provider]"           # e.g. Hetzner, AWS, Vercel, Netlify
+  live:
+    url: "https://{app}.omysha.org"         # Production environment URL
+    hosting: "[Hosting provider]"           # e.g. Hetzner, AWS, Vercel, Netlify
+
+# ─────────────────────────────────────────────
+# CI/CD
+# ─────────────────────────────────────────────
+cicd:
+  platform: "[GitHub Actions | GitLab CI | etc.]"  # CI/CD platform used for this product
+  workflows:
+    - name: "[Workflow name]"               # Human-readable name of the workflow
+      file: "[.github/workflows/filename.yml]"  # Path to workflow definition file
+      trigger: "[push | tag | manual]"      # What triggers this workflow
+      target: "[test | production | both]"  # Which environment(s) this workflow deploys to
+  deploy_method: "[rsync | Docker | Kubernetes | etc.]"  # How code reaches the server
+  rollback_method: "[Redeploy previous tag | etc.]"      # How to revert a bad deploy
+
+# ─────────────────────────────────────────────
+# TESTING
+# ─────────────────────────────────────────────
+testing:
+  framework: "[pytest | jest | etc.]"       # Primary test framework
+  test_command: "[command to run tests]"    # Full command to execute the test suite (e.g. npm test)
+  coverage_target: 80                       # Minimum acceptable code coverage percentage
+  ci_test_stage: "[Name of CI stage that runs tests]"  # CI stage or job name for test execution
+  test_types:                               # Types of tests maintained for this product
+    - "[unit | integration | e2e | link-check]"
+
+# ─────────────────────────────────────────────
+# ISSUE TRACKING
+# ─────────────────────────────────────────────
+issues:
+  tracker: "[GitHub Issues | Jira | Linear | etc.]"  # Issue tracking system used
+  project_board_url: "[URL to project board]"        # Direct link to the project board or kanban view
+  label_schema: "[path to label documentation]"      # Path to document describing label conventions
+  escalation_template: "[path to escalation issue template]"  # Path to the escalation issue template
+
+# ─────────────────────────────────────────────
+# TECH STACK
+# ─────────────────────────────────────────────
+tech_stack:
+  languages:                                # Programming languages used (with versions)
+    - "[Language and version]"              # e.g. Python 3.12, TypeScript 5.4
+  frameworks:                               # Frameworks used (with versions)
+    - "[Framework and version]"             # e.g. Docusaurus 3.7, FastAPI 0.115
+  databases: []                             # Database systems used; empty list if none (e.g. static sites)
+  key_dependencies:                         # Major runtime or build dependencies worth noting
+    - "[Major dependency]"                  # e.g. React 19, SQLAlchemy 2.0
+
+# ─────────────────────────────────────────────
+# UPDSS INTEGRATION
+# ─────────────────────────────────────────────
+updss:
+  methodology_version: "[v4.0.0]"           # Version of the UPDSS methodology governing this product
+  governing_release: "[vX.Y]"              # Current active release for this product
+  vault_path: "[path to vault root]"        # Relative path from repo root to the vault directory
+  registry_path: "[path to this file]"      # Relative path from repo root to this profile file
+
+# ─────────────────────────────────────────────
+# NOTES
+# ─────────────────────────────────────────────
+# Use this section for any additional context that does not fit the sections above.
+# IMPORTANT: Do NOT store credentials, API keys, tokens, or passwords in this file.
+# Secrets belong in environment variables, vault secrets managers, or GitHub Secrets.
+notes: []                                   # Free-form list of additional notes; empty if none
+
+# ---
+# CHANGELOG
+# Version | Date       | Author                              | Changes
+# 1.0.0   | 2026-03-06 | Nitin Dhawan (gtalk.nitin@gmail.com) | Initial template creation (STORY-033)

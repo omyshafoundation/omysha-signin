@@ -1,0 +1,110 @@
+# Gate Review — Release-level
+# doc_id:     VAULT-GATE-XY-GN
+# template:   gate-template.yaml (product/vault/templates/)
+# version:    5.0.0
+# created:    YYYY-MM-DD
+# created_by: [Full Name] ([git-email])
+#
+# Usage: Copy to vault/releases/vX.Y/GN-review.yaml
+#        One file per gate per release. Combines review packet + decision.
+#
+# TEST EVIDENCE CONVENTION (v0.4.5+):
+#   When preparing a G2 or G3 review, the agent MUST include the test_evidence
+#   section populated from the latest merged summary in vault/test-results/.
+#   Steps:
+#     1. Run tests on all available machines (product/code/tools/run_tests.py)
+#     2. Merge results (product/code/tools/merge_test_results.py)
+#     3. Copy the summary data into the test_evidence section below
+#     4. List all per-machine run file paths in test_evidence.runs
+#   The test_evidence section is OPTIONAL for G1 (design review) but REQUIRED
+#   for G2 (implementation review) and G3 (release-ready review).
+# ---
+
+gate: G1  # G1 | G2 | G3
+release: vX.Y
+date: YYYY-MM-DD
+reviewer: "Name (email)"
+
+# Review (prepared by reviewer or orchestrator before human review)
+review:
+  stories_reviewed:
+    - STORY-NNN  # list all stories in scope
+  checklist:
+    # G1: spec checks
+    # G2: implementation checks
+    # G3: release-ready checks
+    #
+    # Include all applicable items from the list below.
+    # Standard checklist items (copy relevant ones per gate):
+    #
+    # G1:
+    #   - "All story specs complete and unambiguous"
+    #   - "Open questions resolved"
+    #   - "MANDATORY: UI stories have ui_review field with level + detail"
+    #   - "MANDATORY: Human has reviewed and approved UI/UX design for all UI stories"
+    #   - "UI approval recorded with reviewer name and date"
+    #   NOTE: Agents MUST NOT implement UI stories until human approves the design.
+    #         This is a BLOCKING prerequisite — not a checkbox to fill after the fact.
+    #
+    # G2:
+    #   - "All acceptance criteria pass"
+    #   - "MANDATORY: test_evidence section populated from latest merged summary"
+    #   - "MANDATORY: all_tests_pass is true (or failures explicitly acknowledged)"
+    #   - "MANDATORY: Human has walked through every implemented UI (running, not screenshots)"
+    #   - "UI implementation matches G1-approved design"
+    #   - "UI walkthrough approval recorded with reviewer name and date"
+    #   - "Agent manual (AGENT_ORIENTATION.md) updated for any new agent protocols"
+    #   - "Developers Guide updated for any new capabilities"
+    #   - "Users Guide updated for any new UI or user-facing changes"
+    #   NOTE: An agent CANNOT approve its own UI work. Only a human can approve G2 for UI stories.
+    #
+    # G3:
+    #   - "MANDATORY: test_evidence section populated with final test results"
+    #   - "MANDATORY: all_tests_pass is true"
+    #   - "MANDATORY: coverage threshold met"
+    #   - "Agent manual (AGENT_ORIENTATION.md) updated for any new agent protocols"
+    #   - "Developers Guide updated for any new capabilities"
+    #   - "Users Guide updated for any new UI or user-facing changes"
+    #   - "Release notes complete"
+    #   - "All stories in done status"
+    #
+    - item: "description"
+      pass: true  # true | false
+      notes: ""
+  summary: ""
+
+# ─────────────────────────────────────────────
+# TEST EVIDENCE (REQUIRED for G2 and G3; optional for G1)
+# Populated from vault/test-results/{release}/merged-summary.yaml
+# All paths are relative to the vault root (product/vault/).
+# ─────────────────────────────────────────────
+test_evidence:
+  merged_summary: ""             # Path to merged-summary.yaml, e.g. "test-results/v0.4.5/merged-summary.yaml"
+  runs: []                       # List of per-machine run file paths, e.g.:
+    # - "test-results/v0.4.5/runs/run-macbook-nitin-20260315-1422.yaml"
+    # - "test-results/v0.4.5/runs/run-server-01-20260315-1345.yaml"
+  test_summary:
+    total: 0                     # Total tests executed (from merged results)
+    passed: 0                    # Tests passed
+    failed: 0                    # Tests failed
+    skipped: 0                   # Tests skipped
+    coverage_pct: 0.0            # Best line coverage percentage across machines
+    threshold_met: false         # Whether coverage meets release minimum
+  all_tests_pass: false          # true only when failed == 0 and errors == 0
+  uncovered_stories: []          # Story IDs with no test coverage, e.g. [STORY-013-01-04]
+  conflicts: []                  # Cross-machine conflicts from merged summary, e.g.:
+    # - test_id: "T-011-01-01-003"
+    #   issue: "Different test count between machines"
+
+# Decision (human reviewer fills this)
+decision: approved  # approved | approved_with_conditions | rejected
+conditions: []
+rejection_rework_notes: ""
+
+# ---
+# CHANGELOG
+# Version | Date       | Author                    | Changes
+# 5.0.0   | 2026-03-09 | Claude Code (Opus 4.6)    | Added test_evidence section for G2/G3 gates: merged summary path, per-machine run paths, test summary with pass/fail/coverage, all_tests_pass boolean, uncovered stories, cross-machine conflicts (STORY-013-04-04)
+# 4.2.0   | 2026-03-08 | Claude Code (Opus 4.6) | Strengthened UI/UX review requirements: MANDATORY human approval at G1 (design) and G2 (walkthrough); agents cannot approve their own UI; blocking prerequisite language added
+# 4.1.0   | 2026-03-08 | Process Architect (STORY-019-03-02, STORY-019-04-01) | Added standard checklist items: documentation update requirements (agent manual, developers guide, users guide) at G2/G3; UI review checks at G1/G2
+# 4.0.0   | 2026-03-06 | Nitin Dhawan (gtalk.nitin@gmail.com) | Initial creation for UPDSS v4.0.0 — combines review-packet + decision into single release-level file

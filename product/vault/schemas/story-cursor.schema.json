@@ -1,0 +1,296 @@
+{
+  "$defs": {
+    "AutomatedChecks": {
+      "additionalProperties": true,
+      "description": "Automated check status in a cursor.",
+      "properties": {
+        "tests_pass": {
+          "default": false,
+          "title": "Tests Pass",
+          "type": "boolean"
+        },
+        "lint_clean": {
+          "default": false,
+          "title": "Lint Clean",
+          "type": "boolean"
+        },
+        "coverage_met": {
+          "default": false,
+          "title": "Coverage Met",
+          "type": "boolean"
+        }
+      },
+      "title": "AutomatedChecks",
+      "type": "object"
+    },
+    "LastSession": {
+      "additionalProperties": true,
+      "description": "Legacy last_session tracking (v0.1-v0.3 cursors).",
+      "properties": {
+        "model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Role"
+        },
+        "started_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Started At"
+        },
+        "ended_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ended At"
+        },
+        "context_layers_used": {
+          "anyOf": [
+            {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Context Layers Used"
+        },
+        "context_token_estimate": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Context Token Estimate"
+        }
+      },
+      "title": "LastSession",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "Story-level cursor.yaml tracking agent progress on a story.",
+  "properties": {
+    "story_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Story Id"
+    },
+    "phase": {
+      "title": "Phase",
+      "type": "string"
+    },
+    "current_task": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Current Task"
+    },
+    "tasks_done": {
+      "items": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "title": "Tasks Done",
+      "type": "array"
+    },
+    "tasks_total": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": 0,
+      "title": "Tasks Total"
+    },
+    "session_count": {
+      "default": 0,
+      "minimum": 0,
+      "title": "Session Count",
+      "type": "integer"
+    },
+    "cost_usd_total": {
+      "default": 0.0,
+      "minimum": 0,
+      "title": "Cost Usd Total",
+      "type": "number"
+    },
+    "cost_usd_budget": {
+      "default": 0.0,
+      "minimum": 0,
+      "title": "Cost Usd Budget",
+      "type": "number"
+    },
+    "last_checkpoint": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Last Checkpoint"
+    },
+    "last_commit": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Last Commit"
+    },
+    "next_action": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Next Action"
+    },
+    "automated_checks": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AutomatedChecks"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "escalation_state": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Escalation State"
+    },
+    "hill_position": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Hill Position"
+    },
+    "last_session": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LastSession"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "phase"
+  ],
+  "title": "StoryCursor",
+  "type": "object"
+}

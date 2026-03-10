@@ -1,0 +1,107 @@
+# product-profile: omysha-signin.yaml — Omysha SignIn product profile
+# doc_id:     VAULT-PROFILE-002
+# template:   product-profile-template.yaml (product/vault/templates/)
+# version:    1.0.0
+# created:    2026-03-10
+# created_by: Nitin Dhawan (gtalk.nitin@gmail.com)
+#
+# IMPORTANT: Do NOT store credentials, API keys, tokens, or passwords in this file.
+# Secrets belong in environment variables, vault secrets managers, or GitHub Secrets.
+# ---
+
+# ─────────────────────────────────────────────
+# IDENTITY
+# ─────────────────────────────────────────────
+identity:
+  name: "Omysha SignIn"
+  id: "omysha-signin"
+  description: "Centralised Identity & Access Management System — Authentik-based SSO and authorisation for all Omysha digital systems"
+  repo_url: "https://github.com/omyshafoundation/omysha-signin"
+  team: "Omysha Foundation"
+  status: active
+  created: 2026-03-02
+  owner: "Nitin Dhawan (gtalk.nitin@gmail.com)"
+
+# ─────────────────────────────────────────────
+# ENVIRONMENTS
+# ─────────────────────────────────────────────
+environments:
+  local:
+    url: "http://localhost:3008"
+    setup_doc: "product/operations/local-setup.md"
+  test:
+    url: "https://test.signin.omysha.org"
+    hosting: "Vultr"
+  live:
+    url: "https://signin.omysha.org"
+    hosting: "Vultr"
+
+# ─────────────────────────────────────────────
+# CI/CD
+# ─────────────────────────────────────────────
+cicd:
+  platform: "GitHub Actions"
+  workflows: []
+  deploy_method: "Docker Compose on VPS"
+  rollback_method: "Pin Authentik image to previous version tag, docker compose up -d"
+
+# ─────────────────────────────────────────────
+# TESTING
+# ─────────────────────────────────────────────
+testing:
+  framework: "manual"
+  test_command: "N/A"
+  coverage_target: 0
+  ci_test_stage: "N/A"
+  test_types:
+    - smoke
+    - integration
+
+# ─────────────────────────────────────────────
+# ISSUE TRACKING
+# ─────────────────────────────────────────────
+issues:
+  tracker: "GitHub Issues"
+  project_board_url: "https://github.com/omyshafoundation/omysha-signin/issues"
+  label_schema: "N/A"
+  escalation_template: "N/A"
+
+# ─────────────────────────────────────────────
+# TECH STACK
+# ─────────────────────────────────────────────
+tech_stack:
+  languages:
+    - "Python (Authentik internals)"
+    - "YAML (blueprints, configuration)"
+  frameworks:
+    - "Authentik 2024.12.3"
+  databases:
+    - "PostgreSQL 16"
+    - "Redis 7"
+  key_dependencies:
+    - "Docker"
+    - "Nginx (production reverse proxy)"
+    - "Let's Encrypt (TLS)"
+    - "Google OAuth2 (identity brokering)"
+
+# ─────────────────────────────────────────────
+# UPDSS INTEGRATION
+# ─────────────────────────────────────────────
+updss:
+  methodology_version: "v4.0.0"
+  governing_release: "v0.1"
+  vault_path: "product/vault/"
+  registry_path: "product/vault/registry/omysha-signin.yaml"
+
+# ─────────────────────────────────────────────
+# NOTES
+# ─────────────────────────────────────────────
+notes:
+  - "Production deployed 2026-03-02 at upanel.omysha.org, DNS changed to signin.omysha.org"
+  - "Post-deployment config pending: Google OAuth source, groups, OIDC providers"
+  - "First consumer will be the Omysha Secretariat System, second consumer is UPDSS dashboard (v0.5)"
+
+# ---
+# CHANGELOG
+# Version | Date       | Author                              | Changes
+# 1.0.0   | 2026-03-10 | Nitin Dhawan (gtalk.nitin@gmail.com) | Initial product profile

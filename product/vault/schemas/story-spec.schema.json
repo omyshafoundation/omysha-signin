@@ -1,0 +1,720 @@
+{
+  "$defs": {
+    "AcceptanceCriterion": {
+      "additionalProperties": true,
+      "description": "A single acceptance criterion in a story spec.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "given": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Given"
+        },
+        "when": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "When"
+        },
+        "then": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Then"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "test_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Test Ref"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "AcceptanceCriterion",
+      "type": "object"
+    },
+    "AgentConfig": {
+      "additionalProperties": true,
+      "description": "Agent configuration block. Supports both flat and nested (role-based) formats.",
+      "properties": {
+        "model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model"
+        },
+        "tools_permitted": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tools Permitted"
+        },
+        "tools_denied": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tools Denied"
+        },
+        "max_turns": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Turns"
+        },
+        "coding_agent": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Coding Agent"
+        },
+        "qa_agent": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Qa Agent"
+        },
+        "docs_agent": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Docs Agent"
+        }
+      },
+      "title": "AgentConfig",
+      "type": "object"
+    },
+    "DataClassification": {
+      "enum": [
+        "public",
+        "internal",
+        "confidential",
+        "restricted"
+      ],
+      "title": "DataClassification",
+      "type": "string"
+    },
+    "SecurityStructured": {
+      "additionalProperties": true,
+      "description": "Structured security block (v4.0+ format).",
+      "properties": {
+        "auth_required": {
+          "default": false,
+          "title": "Auth Required",
+          "type": "boolean"
+        },
+        "data_classification": {
+          "$ref": "#/$defs/DataClassification",
+          "default": "internal"
+        },
+        "input_validation": {
+          "default": "none",
+          "title": "Input Validation",
+          "type": "string"
+        },
+        "specific_requirements": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Specific Requirements"
+        }
+      },
+      "title": "SecurityStructured",
+      "type": "object"
+    },
+    "StoryMetadata": {
+      "additionalProperties": true,
+      "description": "Metadata block of a story.yaml file.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "feature": {
+          "title": "Feature",
+          "type": "string"
+        },
+        "epic": {
+          "title": "Epic",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/StoryStatus"
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner"
+        },
+        "created": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "format": "date",
+              "type": "string"
+            }
+          ],
+          "title": "Created"
+        },
+        "created_by": {
+          "title": "Created By",
+          "type": "string"
+        },
+        "release": {
+          "title": "Release",
+          "type": "string"
+        },
+        "estimated_days": {
+          "maximum": 10,
+          "minimum": 1,
+          "title": "Estimated Days",
+          "type": "integer"
+        },
+        "cost_budget_usd": {
+          "minimum": 0,
+          "title": "Cost Budget Usd",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "feature",
+        "epic",
+        "title",
+        "status",
+        "created",
+        "created_by",
+        "release",
+        "estimated_days",
+        "cost_budget_usd"
+      ],
+      "title": "StoryMetadata",
+      "type": "object"
+    },
+    "StoryStatus": {
+      "enum": [
+        "planned",
+        "g1_approved",
+        "in_progress",
+        "done"
+      ],
+      "title": "StoryStatus",
+      "type": "string"
+    },
+    "Task": {
+      "additionalProperties": true,
+      "description": "A single task in a story spec.\n\nSupports both full format (``description`` + ``status``) and stub format\n(``title`` only, no status).",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TaskStatus"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "Task",
+      "type": "object"
+    },
+    "TaskStatus": {
+      "enum": [
+        "pending",
+        "in_progress",
+        "done",
+        "skipped"
+      ],
+      "title": "TaskStatus",
+      "type": "string"
+    },
+    "UIReview": {
+      "additionalProperties": true,
+      "description": "Optional UI review block for stories with UI/UX changes.",
+      "properties": {
+        "level": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Level"
+        },
+        "detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Detail"
+        },
+        "g1_approved_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "G1 Approved By"
+        },
+        "g1_approved_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "G1 Approved Date"
+        },
+        "g2_walkthrough_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "G2 Walkthrough By"
+        },
+        "g2_walkthrough_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "G2 Walkthrough Date"
+        }
+      },
+      "title": "UIReview",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "Complete story.yaml specification.\n\nSupports two formats:\n- Full format (v4.0+): has ``metadata`` block, ``what``, ``why``, ``security``, etc.\n- Stub format (CR stubs): uses flat ``story_id``, ``title``, ``description`` fields.\n\nSecurity field accepts either a list of strings (v0.1-v0.3 format)\nor a structured dict (v4.0+ format).",
+  "properties": {
+    "metadata": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/StoryMetadata"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "what": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "What"
+    },
+    "why": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Why"
+    },
+    "constraints": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Constraints"
+    },
+    "out_of_scope": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Out Of Scope"
+    },
+    "security": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SecurityStructured"
+        },
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Security"
+    },
+    "acceptance_criteria": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/AcceptanceCriterion"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Acceptance Criteria"
+    },
+    "tasks": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Task"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tasks"
+    },
+    "agent_config": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AgentConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "depends_on": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Depends On"
+    },
+    "open_questions": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Open Questions"
+    },
+    "ui_review": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/UIReview"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "story_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Story Id"
+    },
+    "title": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Title"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Description"
+    },
+    "cr_ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cr Ref"
+    },
+    "epic": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Epic"
+    },
+    "feature": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Feature"
+    },
+    "cost_budget_usd": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cost Budget Usd"
+    }
+  },
+  "title": "StorySpec",
+  "type": "object"
+}

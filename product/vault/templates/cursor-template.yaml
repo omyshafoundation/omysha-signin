@@ -1,0 +1,77 @@
+# Cursor Template — Two Levels
+# doc_id:     VAULT-CURSOR-NNN-YY-ZZ
+# template:   cursor-template.yaml (product/vault/templates/)
+# version:    5.0.0
+# created:    YYYY-MM-DD
+# created_by: [Full Name] ([git-email])
+#
+# Two schemas in this file. Use only the one matching your scope.
+# Write ownership:
+#   story cursor   -> assigned agent + orchestrator
+#   release cursor -> orchestrator only
+# ---
+
+# =============================================================
+# SCHEMA 1: STORY-LEVEL CURSOR
+# File lives at: vault/epics/EPIC-NNN-slug/features/FEAT-NNN-YY-slug/stories/STORY-NNN-YY-ZZ-slug/cursor.yaml
+# Written by: Assigned agent at every checkpoint.
+#             Commit AFTER the code commit (crash safety).
+# =============================================================
+
+story_id: STORY-NNN-YY-ZZ
+phase: planned
+# phase values (one-way transitions):
+#   planned       -> story written, not yet approved
+#   g1_approved   -> spec approved, agent not yet started
+#   in_progress   -> agent actively executing tasks
+#   done          -> implementation complete
+
+current_task: 0              # Task ID currently in progress (0 = not started)
+tasks_done: []               # List of completed task IDs
+tasks_total: 0               # Total task count (from story.yaml)
+
+session_count: 0             # Number of agent sessions run
+cost_usd_total: 0.00         # Cumulative cost across all sessions
+cost_usd_budget: 0.00        # Hard limit (from story.yaml cost_budget_usd)
+
+last_checkpoint: YYYY-MM-DDTHH:MMZ   # ISO 8601 UTC
+last_commit: ~                        # Git short hash of last code commit
+
+next_action: |
+  [Human-readable description of what the next session should do first.]
+
+automated_checks:
+  tests_pass: false          # true when all AC test_refs pass
+  lint_clean: false          # true when linter reports zero errors
+  coverage_met: false        # true when coverage threshold is met
+
+
+# =============================================================
+# SCHEMA 2: RELEASE-LEVEL CURSOR
+# File lives at: vault/releases/vX.Y-slug/cursor.yaml
+# Written by: Orchestrator only.
+# =============================================================
+
+# release: vX.Y
+# status: pre_g1
+# # status values: pre_g1 | g1_approved | in_progress | done | released
+#
+# current_gate: pre_g1
+# # gate values: pre_g1 | g1_approved | g2_approved | g3_approved | released
+#
+# stories_by_phase:
+#   planned: []
+#   g1_approved: []
+#   in_progress: []
+#   done: []
+#
+# cost_usd_total: 0.00       # Sum of all story cursor cost_usd_total
+# cost_usd_budget: 0.00      # Release-level budget cap
+#
+# last_updated: YYYY-MM-DDTHH:MMZ
+# released_at: ~              # Set when status changes to released
+#
+# # ---
+# # CHANGELOG
+# # Version | Date       | Author                    | Changes
+# # 1.0.0   | YYYY-MM-DD | Orchestrator              | Release cursor initialised
