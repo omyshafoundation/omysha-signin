@@ -1,6 +1,6 @@
 release: v0.1
 title: "Foundation"
-status: g2_approved
+status: released
 goal: |
   Complete Authentik deployment with Google OAuth, full group taxonomy,
   and OIDC providers for first two consumers. Validate JWT groups claim.

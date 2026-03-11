@@ -2,7 +2,7 @@
 
 | Version | Name | Scope | Status |
 |---------|------|-------|--------|
-| **0.1** | Foundation | Authentik deployed, groups created, Google OAuth, first OIDC consumer (Secretariat) | In Progress |
+| **0.1** | Foundation | Authentik deployed, groups created, Google OAuth, first OIDC consumer (Secretariat) | **Released** (2026-03-11) |
 | **0.2** | Internal SSO | HRMS (Frappe), PyTracker, Todo App integrated via SAML/OIDC | Planned |
 | **0.3** | Community SSO | Moodle (VONG Hub) integration, Vongles user population | Planned |
 
