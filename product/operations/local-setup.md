@@ -82,7 +82,7 @@ After the initial admin setup, the following are pre-configured in v0.1:
 | Google OAuth source | Configured (Login with Google on login page) |
 | 22 groups (IAM PRD taxonomy) | Created |
 | Secretariat OIDC provider | Created (client: `SycpMTRPcon...`) |
-| UPDSS Dashboard OIDC provider | Created (client: `oCuJojPhAb...`) |
+| UPDSS Dashboard OIDC provider | Created (client: `oCuJojPhAb...` local, `DzhFHACDgz...` production) |
 | API token (`updss-agent`) | Non-expiring, for agent automation |
 | Custom `groups` scope mapping | JWT includes all user groups |
 | Secretariat access policy | Requires `sys:secretariat:*` group |
@@ -99,8 +99,12 @@ in Google Cloud Console > APIs & Services > Credentials > OAuth 2.0 Client:
 
 ```bash
 # Open in browser — will redirect to Authentik login, then back with a code
-open "http://localhost:3008/application/o/authorize/?client_id=oCuJojPhAbIENwfaRBWvkNRGWZBOdCxA9J8UZXiT&response_type=code&redirect_uri=http://localhost:3021/callback&scope=openid+profile+email+groups"
+open "http://localhost:3008/application/o/authorize/?client_id=oCuJojPhAbIENwfaRBWvkNRGWZBOdCxA9J8UZXiT&response_type=code&redirect_uri=http://localhost:3022/auth/callback&scope=openid+profile+email+groups"
 ```
+
+**Note**: Redirect URIs were updated in v0.5 to match the UPDSS Express server:
+- Local: `http://localhost:3022/auth/callback` (port 3022, `/auth/callback` path)
+- Production: `https://updss.omysha.org/auth/callback`
 
 ## Troubleshooting
 
