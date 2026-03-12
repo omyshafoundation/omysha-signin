@@ -45,12 +45,12 @@ jobs:
             git fetch origin
             git checkout ${{ inputs.ref }}
 
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d
 
             echo "=== Waiting for healthy ==="
             for i in $(seq 1 30); do
-              if docker compose -f docker-compose.yml -f docker-compose.prod.yml ps --format json | grep -q '"Health":"healthy"'; then
+              if docker compose -f docker-compose.prod.yml ps --format json | grep -q '"Health":"healthy"'; then
                 echo "Healthy after ${i}s"
                 break
               fi
@@ -64,7 +64,7 @@ jobs:
                 "${{ secrets.AUTHENTIK_API_TOKEN }}"
             fi
 
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml ps
+            docker compose -f docker-compose.prod.yml ps
 
       - name: Verify rollback
         run: |

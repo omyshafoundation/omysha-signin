@@ -46,8 +46,8 @@ jobs:
             git pull origin ${{ inputs.ref }}
 
             echo "=== Updating Docker Compose stack ==="
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d
 
             echo "=== Waiting for Authentik to be healthy ==="
             for i in $(seq 1 30); do
@@ -66,7 +66,7 @@ jobs:
             fi
 
             echo "=== Deploy complete ==="
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml ps
+            docker compose -f docker-compose.prod.yml ps
 
       - name: Verify deployment
         run: |

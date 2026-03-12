@@ -1,29 +1,50 @@
-# Production override for Omysha SignIn (Authentik)
-# Server: 139.84.133.1 (Vultr)
+# Production compose for Omysha SignIn (Authentik)
+# Server: 139.84.133.1 (Vultr), behind nginx at signin.omysha.org
 #
-# Uses the existing production naming (omysha-iam-*) and volumes
-# to avoid data loss during migration from /opt/omysha-iam/ to
-# /opt/omysha-signin/ (git-managed).
+# STANDALONE — do NOT merge with docker-compose.yml.
+# Usage: docker compose -f docker-compose.prod.yml up -d
 #
-# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# Preserves the existing omysha-iam project name and volumes
+# from the original /opt/omysha-iam/ deployment.
+#
+# Required .env vars: PG_PASS, AUTHENTIK_SECRET_KEY,
+#   AUTHENTIK_HOST, AUTHENTIK_HOST_BROWSER, AUTHENTIK_COOKIE_DOMAIN
 
 name: omysha-iam
 
 services:
+
   db:
+    image: postgres:16-alpine
     container_name: omysha-iam-db
+    restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: ${PG_PASS}
+      POSTGRES_USER: authentik
+      POSTGRES_DB: authentik
     volumes:
-      - omysha_iam_pg_data:/var/lib/postgresql/data
-    ports: []
+      - omysha-iam_omysha_iam_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U authentik"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
+    image: redis:7-alpine
     container_name: omysha-iam-redis
-    ports: []
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   server:
+    image: ghcr.io/goauthentik/server:2024.12.3
     container_name: omysha-iam-server
+    restart: unless-stopped
+    command: server
     environment:
       AUTHENTIK_REDIS__HOST: redis
       AUTHENTIK_POSTGRESQL__HOST: db
@@ -31,19 +52,27 @@ services:
       AUTHENTIK_POSTGRESQL__NAME: authentik
       AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
-      AUTHENTIK_ERROR_REPORTING__ENABLED: ${AUTHENTIK_ERROR_REPORTING__ENABLED}
+      AUTHENTIK_ERROR_REPORTING__ENABLED: ${AUTHENTIK_ERROR_REPORTING__ENABLED:-false}
       AUTHENTIK_HOST: ${AUTHENTIK_HOST}
       AUTHENTIK_HOST_BROWSER: ${AUTHENTIK_HOST_BROWSER}
       AUTHENTIK_COOKIE_DOMAIN: ${AUTHENTIK_COOKIE_DOMAIN}
     ports:
       - "127.0.0.1:9010:9000"
     volumes:
-      - omysha_iam_media:/media
-      - omysha_iam_custom_templates:/templates
+      - omysha-iam_omysha_iam_media:/media
+      - omysha-iam_omysha_iam_custom_templates:/templates
       - ./product/code/branding:/media/custom:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   worker:
+    image: ghcr.io/goauthentik/server:2024.12.3
     container_name: omysha-iam-worker
+    restart: unless-stopped
+    command: worker
     environment:
       AUTHENTIK_REDIS__HOST: redis
       AUTHENTIK_POSTGRESQL__HOST: db
@@ -51,19 +80,24 @@ services:
       AUTHENTIK_POSTGRESQL__NAME: authentik
       AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
-      AUTHENTIK_ERROR_REPORTING__ENABLED: ${AUTHENTIK_ERROR_REPORTING__ENABLED}
+      AUTHENTIK_ERROR_REPORTING__ENABLED: ${AUTHENTIK_ERROR_REPORTING__ENABLED:-false}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - omysha_iam_media:/media
-      - omysha_iam_certs:/certs
-      - omysha_iam_custom_templates:/templates
+      - omysha-iam_omysha_iam_media:/media
+      - omysha-iam_omysha_iam_certs:/certs
+      - omysha-iam_omysha_iam_custom_templates:/templates
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
 volumes:
-  omysha_iam_pg_data:
+  omysha-iam_omysha_iam_pg_data:
     external: true
-  omysha_iam_media:
+  omysha-iam_omysha_iam_media:
     external: true
-  omysha_iam_certs:
+  omysha-iam_omysha_iam_certs:
     external: true
-  omysha_iam_custom_templates:
+  omysha-iam_omysha_iam_custom_templates:
     external: true
