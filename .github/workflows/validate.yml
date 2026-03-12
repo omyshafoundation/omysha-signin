@@ -1,0 +1,57 @@
+# Validate Omysha SignIn configuration
+#
+# Runs on push to main and on PRs. Validates docker-compose syntax,
+# checks that required files exist, and lints YAML.
+#
+# Lightweight CI — Authentik itself is a third-party image, so we
+# only validate our configuration, not Authentik's code.
+
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate docker-compose syntax
+        run: docker compose config --quiet
+
+      - name: Check required files exist
+        run: |
+          REQUIRED_FILES=(
+            "docker-compose.yml"
+            "product/operations/local-setup.md"
+            "product/operations/deployment-log.md"
+            "product/code/branding/omysha-logo.png"
+            "product/code/branding/apply-branding.sh"
+          )
+          MISSING=0
+          for f in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$f" ]; then
+              echo "MISSING: $f"
+              MISSING=1
+            else
+              echo "OK: $f"
+            fi
+          done
+          if [ "$MISSING" -eq 1 ]; then
+            echo "Required files are missing"
+            exit 1
+          fi
+
+      - name: Lint YAML files
+        run: |
+          pip install yamllint
+          yamllint -d "{extends: relaxed, rules: {line-length: {max: 200}}}" docker-compose.yml

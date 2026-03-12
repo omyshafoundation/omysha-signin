@@ -1,0 +1,79 @@
+# Deploy Omysha SignIn (Authentik) to Production
+#
+# Triggered manually via workflow_dispatch.
+# SSHes into the Vultr server, pulls the latest code, and restarts
+# the Docker Compose stack. Then applies branding via Authentik API.
+#
+# This pattern is reusable for any Docker Compose product on the
+# same server — only the DEPLOY_PATH and compose project differ.
+
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref to deploy (branch, tag, or SHA)'
+        required: false
+        default: 'main'
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://signin.omysha.org
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -euo pipefail
+            cd ${{ secrets.DEPLOY_PATH }}
+
+            echo "=== Pulling latest (${{ inputs.ref }}) ==="
+            git fetch origin
+            git checkout ${{ inputs.ref }}
+            git pull origin ${{ inputs.ref }}
+
+            echo "=== Updating Docker Compose stack ==="
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+            echo "=== Waiting for Authentik to be healthy ==="
+            for i in $(seq 1 30); do
+              if docker compose ps --format json | grep -q '"Health":"healthy"'; then
+                echo "Authentik server healthy after ${i}s"
+                break
+              fi
+              sleep 2
+            done
+
+            echo "=== Applying branding ==="
+            if [ -f product/code/branding/apply-branding.sh ]; then
+              bash product/code/branding/apply-branding.sh \
+                "http://localhost:9010" \
+                "${{ secrets.AUTHENTIK_API_TOKEN }}"
+            fi
+
+            echo "=== Deploy complete ==="
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml ps
+
+      - name: Verify deployment
+        run: |
+          sleep 5
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://signin.omysha.org)
+          if [ "$STATUS" -ne 200 ] && [ "$STATUS" -ne 302 ]; then
+            echo "Health check failed with status $STATUS"
+            exit 1
+          fi
+          echo "Production deployment verified - HTTP $STATUS"

@@ -1,0 +1,69 @@
+# Production override for Omysha SignIn (Authentik)
+# Server: 139.84.133.1 (Vultr)
+#
+# Uses the existing production naming (omysha-iam-*) and volumes
+# to avoid data loss during migration from /opt/omysha-iam/ to
+# /opt/omysha-signin/ (git-managed).
+#
+# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+name: omysha-iam
+
+services:
+  db:
+    container_name: omysha-iam-db
+    environment:
+      POSTGRES_PASSWORD: ${PG_PASS}
+    volumes:
+      - omysha_iam_pg_data:/var/lib/postgresql/data
+    ports: []
+
+  redis:
+    container_name: omysha-iam-redis
+    ports: []
+
+  server:
+    container_name: omysha-iam-server
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: db
+      AUTHENTIK_POSTGRESQL__USER: authentik
+      AUTHENTIK_POSTGRESQL__NAME: authentik
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
+      AUTHENTIK_ERROR_REPORTING__ENABLED: ${AUTHENTIK_ERROR_REPORTING__ENABLED}
+      AUTHENTIK_HOST: ${AUTHENTIK_HOST}
+      AUTHENTIK_HOST_BROWSER: ${AUTHENTIK_HOST_BROWSER}
+      AUTHENTIK_COOKIE_DOMAIN: ${AUTHENTIK_COOKIE_DOMAIN}
+    ports:
+      - "127.0.0.1:9010:9000"
+    volumes:
+      - omysha_iam_media:/media
+      - omysha_iam_custom_templates:/templates
+      - ./product/code/branding:/media/custom:ro
+
+  worker:
+    container_name: omysha-iam-worker
+    environment:
+      AUTHENTIK_REDIS__HOST: redis
+      AUTHENTIK_POSTGRESQL__HOST: db
+      AUTHENTIK_POSTGRESQL__USER: authentik
+      AUTHENTIK_POSTGRESQL__NAME: authentik
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${PG_PASS}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY}
+      AUTHENTIK_ERROR_REPORTING__ENABLED: ${AUTHENTIK_ERROR_REPORTING__ENABLED}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - omysha_iam_media:/media
+      - omysha_iam_certs:/certs
+      - omysha_iam_custom_templates:/templates
+
+volumes:
+  omysha_iam_pg_data:
+    external: true
+  omysha_iam_media:
+    external: true
+  omysha_iam_certs:
+    external: true
+  omysha_iam_custom_templates:
+    external: true
