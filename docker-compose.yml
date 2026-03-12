@@ -59,6 +59,7 @@ services:
     volumes:
       - omysha-signin-media:/media
       - omysha-signin-templates:/templates
+      - ./product/code/branding:/media/custom:ro
     depends_on:
       db:
         condition: service_healthy
